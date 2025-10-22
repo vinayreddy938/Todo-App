@@ -2,7 +2,8 @@ const express = require("express");
 const todoRouter = express.Router();
 const Todos = require("../model/todo")
 const {validateData} = require("../utils/helper")
-todoRouter.post("/todo",async (req,res)=>{
+const auth = require("../middlewares/authMiddleWare")
+todoRouter.post("/todo",auth,async (req,res)=>{
     try{
         validateData(req); 
 

@@ -3,6 +3,8 @@ const userRouter =express.Router();
 const {validateUserData,validateLogInData} = require("../utils/helper")
 const UserModel = require("../model/user")
 const bcrypt = require("bcrypt");
+const  jwt = require("jsonwebtoken");
+const SECRET_KEY = "VINAY_SECRET_KEY";
 userRouter.post("/signup",async(req,res)=>{
     try{
         const {name,email,password} = req.body;
@@ -35,7 +37,9 @@ userRouter.post("/login",async(req,res)=>{
         const isValidPassword = await bcrypt.compare(req.body.password,existitingUser.password);
         if(!isValidPassword){
             throw new Error("Invalid Credentails");
-        } 
+        }   
+        const token = jwt.sign({_id:existitingUser._id},SECRET_KEY,{ expiresIn: "1h" });
+        res.cookie("token",token)
         return res.status(200).json(existitingUser);
 
     }catch(err){
