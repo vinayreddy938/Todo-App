@@ -1,7 +1,11 @@
 const moongoose = require("mongoose");
 const Schema = moongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
 const todos = new Schema({
+    fromUserId:{
+        type:ObjectId,
+    },
     todo:{
          type:String,
          required: true,
