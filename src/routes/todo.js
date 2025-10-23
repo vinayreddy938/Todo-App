@@ -86,5 +86,27 @@ todoRouter.delete('/todo/delete/:id', auth, async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+todoRouter.get('/todo/:id', auth, async (req, res) => {
+  try {
+    
+    const { id } = req.params;
+    const fromUserId = req.user._id;
+    const todoObj = await Todos.findOne({ _id: id, fromUserId });
+    if(!todoObj){
+        throw new Error("not found");
+    }
+    
+
+    
+
+    res.json({ todo:todoObj });
+  } catch (err) {
+    if (err.issues) {
+      res.status(400).json({ message: err.issues });
+      return;
+    }
+    res.status(400).json({ message: err.message });
+  }
+});
 
 module.exports = todoRouter;
