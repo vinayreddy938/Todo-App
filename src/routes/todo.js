@@ -67,5 +67,24 @@ todoRouter.patch('/todo/update/:id', auth, async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+todoRouter.delete('/todo/delete/:id', auth, async (req, res) => {
+  try {
+ 
+    
+    const { id } = req.params;
+    const  fromUserId = req.user._id;
+    await Todos.deleteOne({_id:id,fromUserId});
+   
+    
+
+    res.json({ message:"todo deleted sucessfully" });
+  } catch (err) {
+    if (err.issues) {
+      res.status(400).json({ message: err.issues });
+      return;
+    }
+    res.status(400).json({ message: err.message });
+  }
+});
 
 module.exports = todoRouter;
