@@ -22,6 +22,6 @@ const todos = new Schema({
 },{
     timestamps:true
 }) ;
-
+todos.index({ title: 1 });
 const todo = moongoose.model("todos",todos);
 module.exports = todo;

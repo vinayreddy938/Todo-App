@@ -4,6 +4,7 @@ const Todos = require('../model/todo');
 const { validateData } = require('../utils/helper');
 const auth = require('../middlewares/authMiddleWare');
 const { z } = require('zod');
+const todo = require('../model/todo');
 todoRouter.post('/todo', auth, async (req, res) => {
   try {
     //json token -> user vunnadaledha
@@ -80,12 +81,13 @@ todoRouter.delete('/todo/delete/:id', auth, async (req, res) => {
     res.json({ message:"todo deleted sucessfully" });
   } catch (err) {
     if (err.issues) {
-      res.status(400).json({ message: err.issues });
+      res.status(404).json({message: err.message});
       return;
     }
     res.status(400).json({ message: err.message });
   }
-});
+}); 
+
 todoRouter.get('/todo/:id', auth, async (req, res) => {
   try {
     
@@ -105,8 +107,24 @@ todoRouter.get('/todo/:id', auth, async (req, res) => {
       res.status(400).json({ message: err.issues });
       return;
     }
-    res.status(400).json({ message: err.message });
+    res.status(404).json({ message: err.message });
   }
 });
+
+todoRouter.get("/todos/search/:query",auth,async(req,res)=>{
+    try{
+        const{query} = req.params;
+        const{_id} = req.user;
+        const todos = await Todos.find({fromUserId:_id,todo: { $regex: query, $options: "i" }});//$regex is a MongoDB operator used for pattern matching (like "searching for text")
+        if(todos.length==0){
+            throw new Error("no items matched")
+        }
+        res.status(200).send({searchResults:todos})
+    }catch(err){
+         res.status(404).send({message:err.message})
+
+
+    }
+})
 
 module.exports = todoRouter;
