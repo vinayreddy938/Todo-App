@@ -4,6 +4,7 @@ const { validateUserData, validateLogInData } = require("../utils/helper")
 const UserModel = require("../model/user")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 const SECRET_KEY = "VINAY_SECRET_KEY";
 userRouter.post("/signup", async (req, res) => {
     try {

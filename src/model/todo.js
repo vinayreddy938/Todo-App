@@ -11,7 +11,7 @@ const todos = new Schema({
          required: true,
          trim: true,         
          minlength: 3,       
-         maxlength: 20       
+         maxlength: 100       
     },
     status:{
         type:String,
