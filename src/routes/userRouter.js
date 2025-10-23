@@ -30,7 +30,7 @@ userRouter.post("/login", async (req, res) => {
 
         validateLogInData(req);
         const { email, password } = req.body;
-        const existitingUser = await UserModel.findOne({ email });
+        const existitingUser = await UserModel.findOne({ email }); // email,password
         if (!existitingUser) {
             throw new Error("User Not Found");
         }
@@ -38,7 +38,7 @@ userRouter.post("/login", async (req, res) => {
         if (!isValidPassword) {
             throw new Error("Invalid Credentails");
         }
-        const token = jwt.sign({ _id: existitingUser._id }, SECRET_KEY, { expiresIn: "1h" });
+        const token = jwt.sign({ _id: existitingUser._id }, SECRET_KEY, { expiresIn: "1h" });  
         res.cookie("token", token, 
             {   httpOnly: true, //only acessed via httpOnly we didnt acess in developer console also
                 secure: true,         // only on HTTPS
@@ -51,5 +51,6 @@ userRouter.post("/login", async (req, res) => {
         res.status(400).json({ message: err.message })
 
     }
-})
+}) 
+ 
 module.exports = userRouter;

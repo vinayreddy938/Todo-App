@@ -9,8 +9,8 @@ const authMiddleWare = async (req,res,next)=>{
         if(!existitingUser){
             throw new Error("Invalid Auth")
         } 
-        req.user = existitingUser;
-
+        req.user = existitingUser;  //let req{user:dbStore}
+ 
         next();
     }catch(err){
         if (error.name === "TokenExpiredError") {

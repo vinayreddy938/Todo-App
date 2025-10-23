@@ -5,6 +5,7 @@ const {validateData} = require("../utils/helper")
 const auth = require("../middlewares/authMiddleWare")
 todoRouter.post("/todo",auth,async (req,res)=>{
     try{
+        //json token -> user vunnadaledha
         validateData(req); 
            const current = req.user;
            const { todo, status } = req.body;
@@ -20,6 +21,19 @@ todoRouter.post("/todo",auth,async (req,res)=>{
 
     }
 }) 
+//relations
+todoRouter.get("/todos",auth,async(req,res)=>{
+    try{
+        const  userTodos = await Todos.find({fromUserId:req.user._id});
+
+        res.status(200).json({userTodos})
+
+    }catch(err){ 
+        console.log(err)
+
+    }
+})
+
 
 
 module.exports = todoRouter;
